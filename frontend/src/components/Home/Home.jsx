@@ -122,16 +122,12 @@ const Home = ({
   
   // START of logic for filtering products:
 
-  // Use useMemo to apply filtering and search
   const filteredProducts = useMemo(() => {
-    console.log('Filtering with searchQuery:', searchQuery); // Debug log
     
-    // Apply category filter first
     let filtered = selectedCategory === 'All' 
       ? allProducts 
       : allProducts.filter(product => product.category === selectedCategory);
     
-    // Apply search filter if there's a search query
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       
@@ -156,15 +152,10 @@ const Home = ({
           category.includes(query)
         );
         
-        if (matches) {
-          console.log('Product matched search:', product.name); // Debug log
-        }
-        
         return matches;
       });
     }
     
-    console.log('Filtered products count:', filtered.length); // Debug log
     return filtered;
   }, [allProducts, selectedCategory, searchQuery]);
 
