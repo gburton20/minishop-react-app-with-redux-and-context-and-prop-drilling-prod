@@ -177,4 +177,8 @@ SIMPLE_JWT = {
     "ISSUER": f"https://{AUTH0_DOMAIN}/",
 }
 
+# Stripe configuration
+STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
+
 # END of custom/third-party settings:

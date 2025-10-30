@@ -19,4 +19,6 @@ rest-framework-simplejwt==0.0.2
 rsa==4.9.1
 six==1.17.0
 sqlparse==0.5.3
+stripe==13.1.0
+typing_extensions==4.15.0
 urllib3==2.5.0

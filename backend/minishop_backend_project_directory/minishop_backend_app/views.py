@@ -8,6 +8,20 @@ from rest_framework.views import APIView
 from .models import Product
 from .serializers import ProductSerializer
 
+# Add these imports for Stripe
+import stripe
+import json
+from django.conf import settings
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+
+# Set your Stripe secret key from Django settings
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+# Debug: Print the key to verify it's loaded (remove this in production)
+print(f"Stripe key loaded: {settings.STRIPE_SECRET_KEY[:12]}..." if settings.STRIPE_SECRET_KEY else "No Stripe key found!")
+
 def index(request):
     return HttpResponse("Hello, world. You're at the minishop_backend_project_settings index.")
 def product_detail(request, product_id):
@@ -66,3 +80,70 @@ class ProfileAPIView(APIView):
             return Response(data, status=status.HTTP_200_OK)
         else:
             return Response({"detail": "Authentication credentials were not provided."}, status=status.HTTP_401_UNAUTHORIZED)
+
+# Add this new Stripe checkout view
+@csrf_exempt
+@require_http_methods(["POST"])
+def create_checkout_session(request):
+    try:
+        # Debug: Check if Stripe key is available
+        if not settings.STRIPE_SECRET_KEY:
+            return JsonResponse({'error': 'Stripe secret key not configured'}, status=500)
+            
+        print(f"Using Stripe key: {settings.STRIPE_SECRET_KEY[:12]}...")  # Debug log
+        
+        data = json.loads(request.body)
+        items = data.get('items', [])
+        
+        print(f"Received items: {items}")  # Debug log
+        
+        # Create line items for Stripe
+        line_items = []
+        for item in items:
+            # Build product_data dynamically to avoid empty strings
+            product_data = {
+                'name': item['name'],
+            }
+            
+            # Only add description if it's not empty
+            description = item.get('description', '').strip()
+            if description:
+                product_data['description'] = description
+            
+            # Only add images if they exist and are not empty
+            image = item.get('image', '').strip()
+            if image:
+                product_data['images'] = [image]
+            
+            line_items.append({
+                'price_data': {
+                    'currency': 'usd',
+                    'product_data': product_data,
+                    'unit_amount': int(float(item['price']) * 100),  # Convert to cents
+                },
+                'quantity': item['quantity'],
+            })
+        
+        print(f"Created line items: {line_items}")  # Debug log
+        
+        # Create Stripe checkout session
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=line_items,
+            mode='payment',
+            success_url='http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url='http://localhost:5173/cart',
+        )
+        
+        print(f"Created session: {checkout_session.id}")  # Debug log
+        print(f"Checkout URL: {checkout_session.url}")  # Debug log
+        
+        # Return both the session ID and the checkout URL
+        return JsonResponse({
+            'id': checkout_session.id,
+            'url': checkout_session.url
+        })
+        
+    except Exception as e:
+        print(f"Error creating checkout session: {str(e)}")  # Debug log
+        return JsonResponse({'error': str(e)}, status=400)
