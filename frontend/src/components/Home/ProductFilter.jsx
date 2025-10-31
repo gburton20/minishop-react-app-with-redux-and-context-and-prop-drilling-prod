@@ -16,12 +16,14 @@ const ProductFilter = ({ onCategoryChange, allProducts }) => {
   const getCategoryEmoji = (category) => {
     const emojiMap = {
       'beauty': '💄',
+      'electronics': '🔌',
       'fragrances': '🌸',
       'furniture': '🪑',
       'groceries': '🛒',
       'home-decoration': '🏠',
       'kitchen-accessories': '🍳',
       'laptops': '💻',
+      'mens-accessories': '🧢',
       'mens-shirts': '👔',
       'mens-shoes': '👞',
       'mens-watches': '⌚',

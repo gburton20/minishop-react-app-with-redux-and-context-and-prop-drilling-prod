@@ -85,11 +85,34 @@ const Home = ({
   useEffect(() => {
     const fetchCustomProducts = async () => {
       try {
-        const response = await fetch('http://localhost:8000/products/');
-        if (response.ok) {
-          const data = await response.json();
-          setCustomProducts(data.results || data); // handle paginated or non-paginated response
+        let allCustomProducts = [];
+        let url = 'http://localhost:8000/products/';
+        
+        // Fetch all pages
+        while (url) {
+          const response = await fetch(url);
+          if (response.ok) {
+            const data = await response.json();
+            
+            // Add products from current page
+            if (data.results) {
+              allCustomProducts = [...allCustomProducts, ...data.results];
+            } else if (Array.isArray(data)) {
+              // Handle case where response is direct array (no pagination)
+              allCustomProducts = [...allCustomProducts, ...data];
+              break;
+            }
+            
+            // Get next page URL
+            url = data.next;
+          } else {
+            console.error('Error fetching custom products:', response.statusText);
+            break;
+          }
         }
+        
+        console.log(`Fetched ${allCustomProducts.length} custom products from Django API`);
+        setCustomProducts(allCustomProducts);
       } catch (err) {
         console.error('Error fetching custom products:', err);
       }
