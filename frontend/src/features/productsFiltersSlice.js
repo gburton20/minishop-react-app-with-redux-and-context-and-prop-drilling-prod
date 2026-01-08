@@ -3,14 +3,16 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 export const fetchProducts = createAsyncThunk(
     'products/fetchProducts',
     async () => {
-        const response = await fetch('https://api.escuelajs.co/api/v1/products');
-        return await response.json();
+        const response = await fetch('https://dummyjson.com/products');
+        const data = await response.json();
+        return data.products;
     }
 );
 
 const initialState = {
     products: [],
     selectedCategory: 'All',
+    searchQuery: '',
     status: 'idle',
     error: null
 };
@@ -25,6 +27,9 @@ const productsFiltersSlice = createSlice({
         setProducts(state, action) {
             state.products = action.payload;
         },
+        setSearchQuery(state, action) {
+            state.searchQuery = action.payload;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -42,5 +47,30 @@ const productsFiltersSlice = createSlice({
     }
 });
 
-export const { setSelectedCategory, setProducts } = productsFiltersSlice.actions;
+export const selectFilteredProducts = (state, allProducts) => {
+  const { selectedCategory, searchQuery } = state.productsFilters;
+  
+  let filtered = selectedCategory === 'All' 
+    ? allProducts 
+    : allProducts.filter(product => product.category === selectedCategory);
+  
+if (searchQuery.trim()) {
+  const query = searchQuery.toLowerCase();
+  filtered = filtered.filter(product => {
+    const description = product.description?.toLowerCase() || '';
+    const name = product.name?.toLowerCase() || '';
+    const category = product.category?.toLowerCase() || '';
+    
+    return (
+      description.includes(query) ||
+      name.includes(query) ||
+      category.includes(query)
+    );
+  });
+}
+  
+  return filtered;
+};
+
+export const { setSelectedCategory, setProducts, setSearchQuery } = productsFiltersSlice.actions;
 export default productsFiltersSlice.reducer
