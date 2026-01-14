@@ -5,6 +5,7 @@ import BannerAdContainer from './BannerAdContainer'
 import ProductCardsList from './ProductCardsList/ProductCardsList'
 import SellProductButton from './SellProductButton'
 import Pagination from './Pagination'
+import ProductDetailsModal from '../ProductDetailsModal'
 import { useAuth0 } from "@auth0/auth0-react";
 import CartContext from '../../context/CartContext'
 import { useSelector, useDispatch } from 'react-redux';
@@ -17,6 +18,10 @@ const Home = ({
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [customProducts, setCustomProducts] = useState([]);
+
+  // Product details modal state:
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   // Pagination state:
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,6 +73,20 @@ const Home = ({
   }
   
   // END of logic for SellProductForm.jsx
+  
+  // START of logic for ProductDetailsModal:
+  
+  const openProductModal = (product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+  
+  const closeProductModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
+  };
+  
+  // END of logic for ProductDetailsModal
   
   // START of logic for fetching products:
 
@@ -245,7 +264,12 @@ const Home = ({
           isFormOpen={isFormOpen}
           setCustomProducts={setCustomProducts}
         />}
-        <BannerAdContainer/>
+        {isModalOpen && <ProductDetailsModal 
+          product={selectedProduct}
+          closeModal={closeProductModal}
+          isModalOpen={isModalOpen}
+        />}
+        <BannerAdContainer openProductModal={openProductModal} />
 
         {/* Products count info */}
         <div className="products-info">
@@ -255,6 +279,7 @@ const Home = ({
         <ProductCardsList
           products={paginatedProducts}
           handleAddToCart={handleAddToCart}
+          openProductModal={openProductModal}
         />
 
         {/* Pagination component */}

@@ -3,18 +3,17 @@ import ProductCard from './ProductCard';
 const ProductCardsList = ({
   products,
   handleAddToCart,
+  openProductModal,
 }) => {
 
   return (
     <div className="product-cards-list">
       {products.map((product) => (
         <ProductCard
-          category={product.category}
+          product={product}
           key={product.id}
-          image={product.image}
-          name={product.name}
-          price={product.price}
           handleAddToCart={handleAddToCart}
+          openProductModal={openProductModal}
         />
       ))}
     </div>

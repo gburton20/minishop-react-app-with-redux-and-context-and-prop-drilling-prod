@@ -12,6 +12,14 @@
   box-sizing: inherit;
 }
 
+/* Global viewport constraints */
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
 /* Home.jsx section: */
 
 .home {
@@ -74,15 +82,62 @@
   font-size: 14px;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
+/* Responsive design - Tailwind-aligned breakpoints */
+
+/* Mobile: 0-639px (base styles above) */
+
+/* sm: Small tablets, large phones in landscape (≥640px) */
+@media (min-width: 640px) {
+  .navbar {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    gap: 0.5rem;
+  }
+  
+  .search-input {
+    width: 35vw;
+  }
+  
+  .product-filter {
+    padding: 0 1.5rem;
+    gap: 1rem;
+  }
+}
+
+/* md: Tablets (≥768px) */
+@media (min-width: 768px) {
+  .navbar {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.75rem 2rem;
+    gap: 1rem;
+  }
+  
+  .search-input {
+    width: 40vw;
+  }
+  
+  .product-filter {
+    flex-direction: row;
+    padding: 0 2rem;
+    margin: 1.5rem 0;
+  }
+  
   .pagination {
-    gap: 4px;
+    gap: 8px;
   }
   
   .pagination-button {
-    padding: 6px 8px;
-    font-size: 12px;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+}
+
+/* lg: Desktops (≥1024px) */
+@media (min-width: 1024px) {
+  .search-input {
+    width: 42.25vw;
   }
 }
 
@@ -90,8 +145,11 @@
 
 .navbar {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
   align-items: center;
+  max-width: 100%;
+  padding: 1rem;
+  gap: 1rem;
 }
 
 .minishop-logo {
@@ -107,7 +165,9 @@
 
 .search-input {
   border-radius: 10px;
-  width: 42.25vw;
+  width: 100%;
+  max-width: 400px;
+  padding: 0.5rem;
 }
 
 .authenticated-user-container {
@@ -169,7 +229,10 @@
 .product-filter {
   display: flex;
   justify-content: space-between;
-  margin: 20px 20px;
+  padding: 0 1rem;
+  margin: 1rem 0;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .sell-product-form {
@@ -334,6 +397,287 @@
 
 .user-login-form-close-button:hover {
     color: #555;
+}
+
+/* ProductDetailsModal.jsx section: */
+/* Info button on product cards */
+.product-card-info-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.2s ease;
+    z-index: 10;
+    padding: 0;
+}
+
+.product-card-info-button:hover {
+    background: white;
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Make product card container relative for absolute positioning */
+.product-card-container {
+    position: relative;
+}
+
+/* Modal overlay */
+.product-details-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.product-details-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal content box */
+.product-details-modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.product-details-modal-overlay.active .product-details-modal-content {
+    transform: scale(1);
+}
+
+/* Close button container */
+.product-details-modal-close-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.product-details-modal-close-button {
+    padding: 4px;
+    transition: opacity 0.2s ease;
+}
+
+.product-details-modal-close-button:hover {
+    opacity: 0.7;
+}
+
+/* Image container */
+.product-details-modal-image-container {
+    width: 100%;
+    max-height: 300px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    overflow: hidden;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.product-details-modal-image {
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+}
+
+/* Product name */
+.product-details-modal-product-name {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 15px 0;
+    text-align: center;
+}
+
+/* Product details fields */
+.product-details-modal-product-brand,
+.product-details-modal-product-category,
+.product-details-modal-product-price,
+.product-details-modal-product-discount,
+.product-details-modal-product-rating,
+.product-details-modal-product-availability {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+.product-details-modal-product-price {
+    font-size: 20px;
+    font-weight: 600;
+    color: #007bff;
+}
+
+.product-details-modal-product-discount {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.product-details-modal-product-rating {
+    color: #ff9800;
+}
+
+/* Product description */
+.product-details-modal-product-description {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.product-details-modal-product-description strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 16px;
+}
+
+.product-details-modal-product-description p {
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ========================================
+   RESPONSIVE BREAKPOINTS (Tailwind-aligned)
+   Mobile-first: base styles above are for 0-639px
+   ======================================== */
+
+/* sm: Small tablets, large phones in landscape (≥640px) */
+@media (min-width: 640px) {
+    .product-details-modal-content {
+        width: 85%;
+        padding: 35px;
+    }
+    
+    .product-details-modal-image-container {
+        max-height: 350px;
+    }
+    
+    .product-details-modal-image {
+        max-height: 350px;
+    }
+    
+    .product-details-modal-product-name {
+        font-size: 26px;
+    }
+}
+
+/* md: Tablets (≥768px) */
+@media (min-width: 768px) {
+    .product-details-modal-content {
+        width: 80%;
+        padding: 40px;
+        max-height: 90vh;
+    }
+    
+    .product-details-modal-image-container {
+        max-height: 400px;
+    }
+    
+    .product-details-modal-image {
+        max-height: 400px;
+    }
+    
+    .product-details-modal-product-name {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+    
+    .product-details-modal-product-brand,
+    .product-details-modal-product-category,
+    .product-details-modal-product-price,
+    .product-details-modal-product-discount,
+    .product-details-modal-product-rating,
+    .product-details-modal-product-availability {
+        font-size: 17px;
+        margin: 12px 0;
+    }
+    
+    .product-details-modal-product-price {
+        font-size: 22px;
+    }
+}
+
+/* lg: Desktops (≥1024px) */
+@media (min-width: 1024px) {
+    .product-details-modal-content {
+        width: 600px; /* Fixed width for large screens */
+        padding: 45px;
+    }
+    
+    .product-details-modal-image-container {
+        max-height: 450px;
+    }
+    
+    .product-details-modal-image {
+        max-height: 450px;
+    }
+    
+    .product-details-modal-product-name {
+        font-size: 30px;
+    }
+    
+    .product-details-modal-product-brand,
+    .product-details-modal-product-category,
+    .product-details-modal-product-price,
+    .product-details-modal-product-discount,
+    .product-details-modal-product-rating,
+    .product-details-modal-product-availability {
+        font-size: 18px;
+    }
+    
+    .product-details-modal-product-price {
+        font-size: 24px;
+    }
+    
+    .product-details-modal-product-description {
+        margin-top: 25px;
+        padding-top: 25px;
+    }
+}
+
+/* Touch device optimizations - make info button always visible */
+@media (hover: none) and (pointer: coarse) {
+    .product-card-info-button {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Hover-capable devices - subtle hover effects */
+@media (hover: hover) and (pointer: fine) {
+    .product-card-info-button:hover {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    
+    .product-details-modal-close-button:hover {
+        opacity: 0.7;
+    }
 }
 
 /* Cart.jsx section: */

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import ProductCard from './ProductCardsList/ProductCard';
 
-const BannerAdContainer = () => {
+const BannerAdContainer = ({ openProductModal }) => {
     const [dailyProduct, setDailyProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -72,14 +72,15 @@ const BannerAdContainer = () => {
             </h1>
             <div className="daily-product-container">
                 <ProductCard
-                    category={dailyProduct.category}
-                    image={dailyProduct.image && dailyProduct.image.startsWith('http')
-                        ? dailyProduct.image  // Already a full URL from Django
-                        : dailyProduct.image 
-                          ? `${import.meta.env.VITE_API_URL}${dailyProduct.image}`
-                          : ''}
-                    name={dailyProduct.name}
-                    price={dailyProduct.price}
+                    product={{
+                        ...dailyProduct,
+                        image: dailyProduct.image && dailyProduct.image.startsWith('http')
+                            ? dailyProduct.image
+                            : dailyProduct.image 
+                              ? `${import.meta.env.VITE_API_URL}${dailyProduct.image}`
+                              : ''
+                    }}
+                    openProductModal={openProductModal}
                 />
             </div>
         </div>
