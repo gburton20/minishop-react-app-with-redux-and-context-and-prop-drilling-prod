@@ -6,6 +6,69 @@ const ProductDetailsModal = ({
   isModalOpen,
 }) => {
   const modalRef = useRef(null);
+  const closeButtonRef = useRef(null);
+  const previousActiveElement = useRef(null);
+
+  // Focus management and scroll lock
+  useEffect(() => {
+    if (isModalOpen) {
+      // Store the element that triggered the modal
+      previousActiveElement.current = document.activeElement;
+      
+      // Prevent body scroll
+      document.body.style.overflow = 'hidden';
+      
+      // Focus the close button when modal opens
+      setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 100);
+    } else {
+      // Restore body scroll
+      document.body.style.overflow = '';
+      
+      // Restore focus to trigger element
+      previousActiveElement.current?.focus();
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isModalOpen]);
+
+  // Focus trap - keep Tab navigation within modal
+  useEffect(() => {
+    function handleTabKey(event) {
+      if (!isModalOpen || event.key !== 'Tab') return;
+
+      const focusableElements = modalRef.current?.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      
+      if (!focusableElements || focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      // If shift+tab on first element, go to last
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+      }
+      // If tab on last element, go to first
+      else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
+      }
+    }
+
+    if (isModalOpen) {
+      document.addEventListener('keydown', handleTabKey);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleTabKey);
+    };
+  }, [isModalOpen]);
 
   // Handle clicking outside modal
   useEffect(() => {
@@ -43,6 +106,10 @@ const ProductDetailsModal = ({
     <>
       <div 
         className={`product-details-modal-overlay${isModalOpen ? ' active' : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-product-name"
+        aria-describedby="modal-product-description"
       >
         <div 
           className='product-details-modal-content'
@@ -51,11 +118,12 @@ const ProductDetailsModal = ({
           {/* Close button */}
           <div className='product-details-modal-close-button-container'>
             <button
+              ref={closeButtonRef}
               className='product-details-modal-close-button' 
               onClick={closeModal} 
-              aria-label="Close"
+              aria-label="Close product details"
               style={{cursor: 'pointer', background: 'none', border: 'none'}}>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-label="Close">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                 <line x1="4" y1="4" x2="16" y2="16" stroke="black" strokeWidth="2" strokeLinecap="round"/>
                 <line x1="16" y1="4" x2="4" y2="16" stroke="black" strokeWidth="2" strokeLinecap="round"/>
               </svg>
@@ -67,14 +135,17 @@ const ProductDetailsModal = ({
             <div className='product-details-modal-image-container'>
               <img 
                 src={product.image} 
-                alt={product.name} 
+                alt={`${product.name} product image`}
                 className='product-details-modal-image'
               />
             </div>
           )}
 
           {/* Product name */}
-          <h2 className='product-details-modal-product-name'>
+          <h2 
+            id="modal-product-name"
+            className='product-details-modal-product-name'
+          >
             {product.name}
           </h2>
 
@@ -116,7 +187,10 @@ const ProductDetailsModal = ({
 
           {/* Product description */}
           {product.description && (
-            <div className='product-details-modal-product-description'>
+            <div 
+              id="modal-product-description"
+              className='product-details-modal-product-description'
+            >
               <strong>Description:</strong>
               <p>{product.description}</p>
             </div>

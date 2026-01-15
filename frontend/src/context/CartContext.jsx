@@ -3,7 +3,8 @@ import { createContext, useEffect, useState } from "react";
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [navCartAddCount, setNavCartAddCount] = useState(0);
+  const [toastMessage, setToastMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
 
   const [cartState, setCartState] = useState(() => {
     const saved = localStorage.getItem('Cart');
@@ -13,6 +14,12 @@ export const CartProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : [];
   });
 
+  // Initialize navCartAddCount from localStorage cart length
+  const [navCartAddCount, setNavCartAddCount] = useState(() => {
+    const saved = localStorage.getItem('Cart');
+    return saved ? JSON.parse(saved).length : 0;
+  });
+
   useEffect(() => {
     localStorage.setItem('Cart', JSON.stringify(cartState));
   }, [cartState]);
@@ -20,6 +27,14 @@ export const CartProvider = ({ children }) => {
   const handleAddToCart = (product) => {
     setCartState(prevCartState => [...prevCartState, product]);
     setNavCartAddCount(previousCount => previousCount + 1);
+    
+    // Show toast notification
+    setToastMessage(`${product.name} added to cart!`);
+    setShowToast(true);
+  };
+
+  const closeToast = () => {
+    setShowToast(false);
   };
 
   const handleRemoveFromCart = (productToRemove) => {
@@ -59,7 +74,10 @@ export const CartProvider = ({ children }) => {
         handleRemoveFromCart,
         counts,
         sumOfCartItems,
-        numOfProductsInCart
+        numOfProductsInCart,
+        toastMessage,
+        showToast,
+        closeToast
       }}
     >
       {children}

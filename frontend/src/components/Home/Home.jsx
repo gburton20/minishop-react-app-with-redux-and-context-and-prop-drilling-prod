@@ -22,6 +22,9 @@ const Home = ({
   // Product details modal state:
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  
+  // Filter toast state:
+  const [filterToast, setFilterToast] = useState({ show: false, message: '' });
 
   // Pagination state:
   const [currentPage, setCurrentPage] = useState(1);
@@ -49,6 +52,18 @@ const Home = ({
 
   const handleCategoryChange = (category) => {
     dispatch(setSelectedCategory(category));
+  };
+  
+  const handleFilterApplied = (categoryName) => {
+    const message = categoryName === 'All' 
+      ? 'Showing all products' 
+      : `Filtered by: ${categoryName}`;
+    setFilterToast({ show: true, message });
+    
+    // Auto-hide toast after 3 seconds
+    setTimeout(() => {
+      setFilterToast({ show: false, message: '' });
+    }, 3000);
   };
 
   // END of Redux section
@@ -253,8 +268,17 @@ const Home = ({
 
   return (
     <div className='home'>
+      {/* Filter toast notification */}
+      {filterToast.show && (
+        <div className="filter-toast filter-toast-visible">
+          <span className="filter-toast-icon">🔍</span>
+          <span className="filter-toast-message">{filterToast.message}</span>
+        </div>
+      )}
+      
       <ProductFilter
         onCategoryChange={handleCategoryChange}
+        onFilterApplied={handleFilterApplied}
         allProducts={allProducts}
       />
         {isAuthenticated && <SellProductButton onClick={openForm}/>}
@@ -269,7 +293,9 @@ const Home = ({
           closeModal={closeProductModal}
           isModalOpen={isModalOpen}
         />}
-        <BannerAdContainer openProductModal={openProductModal} />
+        
+        {/* Show banner at top only when 'All' is selected */}
+        {selectedCategory === 'All' && <BannerAdContainer openProductModal={openProductModal} />}
 
         {/* Products count info */}
         <div className="products-info">
@@ -290,6 +316,9 @@ const Home = ({
           onPreviousPage={handlePreviousPage}
           onNextPage={handleNextPage}
         />
+        
+        {/* Show banner at bottom when a filter is applied */}
+        {selectedCategory !== 'All' && <BannerAdContainer openProductModal={openProductModal} />}
     </div>
   )
 }

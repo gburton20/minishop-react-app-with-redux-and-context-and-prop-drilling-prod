@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useRef } from 'react'
 
-const ProductFilter = ({ onCategoryChange, allProducts }) => {
+const ProductFilter = ({ onCategoryChange, allProducts, onFilterApplied }) => {
   const [expandedCategory, setExpandedCategory] = useState(null);
+  const closeTimeoutRef = useRef(null);
 
   // Category emoji mapping for individual categories
   const emojiMap = {
@@ -107,20 +108,50 @@ const ProductFilter = ({ onCategoryChange, allProducts }) => {
   const handleMetaCategoryClick = (metaName, metaData) => {
     if (metaName === 'All') {
       onCategoryChange('All');
+      onFilterApplied?.('All');
+      setExpandedCategory(null);
     } else if (!metaData.subcategories) {
       // Standalone category like Groceries
       onCategoryChange(metaName.toLowerCase());
+      onFilterApplied?.(metaName);
+      setExpandedCategory(null);
+    } else {
+      // Toggle expanded state for categories with subcategories
+      setExpandedCategory(expandedCategory === metaName ? null : metaName);
     }
-    // For categories with subcategories, clicking just expands/collapses
   };
 
   const handleMouseEnter = (metaName, metaData) => {
+    // Clear any pending close timeout
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+    
     if (metaData.subcategories) {
       setExpandedCategory(metaName);
     }
   };
 
   const handleMouseLeave = () => {
+    // Set a timeout to close the menu
+    closeTimeoutRef.current = setTimeout(() => {
+      setExpandedCategory(null);
+    }, 200);
+  };
+
+  const keepMenuOpen = (metaName) => {
+    // Clear any pending close timeout
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+    setExpandedCategory(metaName);
+  };
+  
+  const handleSubcategoryClick = (subcategory, subcategoryName) => {
+    onCategoryChange(subcategory);
+    onFilterApplied?.(subcategoryName);
     setExpandedCategory(null);
   };
 
@@ -143,14 +174,18 @@ const ProductFilter = ({ onCategoryChange, allProducts }) => {
           </button>
           
           {metaData.subcategories && expandedCategory === metaName && (
-            <div className='product-filter-submenu'>
+            <div 
+              className='product-filter-submenu'
+              onMouseEnter={() => keepMenuOpen(metaName)}
+              onMouseLeave={handleMouseLeave}
+            >
               {metaData.subcategories
                 .filter(subcat => availableCategories.has(subcat))
                 .map(subcategory => (
                   <button
                     key={subcategory}
                     className={`product-filter-subbutton-${subcategory.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
-                    onClick={() => onCategoryChange(subcategory)}
+                    onClick={() => handleSubcategoryClick(subcategory, formatCategoryName(subcategory))}
                     aria-label={`${formatCategoryName(subcategory)} category`}
                   >
                     {formatCategoryName(subcategory)} {getCategoryEmoji(subcategory)}
