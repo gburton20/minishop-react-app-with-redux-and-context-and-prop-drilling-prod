@@ -254,7 +254,7 @@ body {
   width: 50%;
   height: 10%;
 }
-
+/* ✅ cart-nav-icon-button converted to Tailwind */
 .cart-nav-icon {
   position: relative;
 }

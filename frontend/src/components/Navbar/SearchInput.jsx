@@ -11,10 +11,10 @@ export const SearchInput = () => {
 
   return (
     <>
-      <div>
+      <div className='rounded-[10px] bg-white text-[#333]'>
         <input 
           placeholder='Search clothes, electronics, furniture and more...' 
-          className='search-input'
+          className='w-full p-2 rounded-[10px] bg-white text-[#333] border-[#ddd] border'
           id='search_field'
           value={searchQuery}
           onChange={handleSearchChange}
