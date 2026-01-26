@@ -108,12 +108,9 @@ cd minishop-react-app-with-redux-and-context-and-prop-drilling-prod
 
 ```bash
 cd backend/minishop_backend_project_directory
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source source/bin/activate  # On Windows: source\Scripts\activate
 pip install -r requirements.txt
-python manage.py makemigrations
 python manage.py migrate
-python manage.py createsuperuser  # Optional
 python manage.py runserver
 ```
 Backend API is available at `http://localhost:8000/`.
