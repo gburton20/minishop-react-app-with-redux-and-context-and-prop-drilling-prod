@@ -217,12 +217,14 @@ body {
   color: #999;
 }
 
+/* ✅ authenticated-user-container converted to Tailwind */
 .authenticated-user-container {
   display: flex;
   width: auto;
   justify-content: space-between;
 }
 
+/* ✅ login-button converted to Tailwind */
 .login-button, .product-card-add-to-cart-button, .cart-proceed-to-checkout-button {
   width: fit-content;
   background-color: #05ABF3;
@@ -238,6 +240,7 @@ body {
   background-color: #007bff;
 }
 
+/* ✅ logout-button converted to Tailwind */
 .logout-button, .clear-cart-button {
   width: fit-content;
   background-color: grey;
@@ -256,6 +259,7 @@ body {
   position: relative;
 }
 
+/* ✅ Converted to Tailwind */
 /* .cart-item-counter {
   position: absolute;
   top: 30px;

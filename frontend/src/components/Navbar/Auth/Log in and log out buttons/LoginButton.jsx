@@ -4,9 +4,9 @@ const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
 
   return (
-    <div className='log-in-button-container'>
+    <div className='flex justify-center'>
       <button 
-        className="login-button"
+        className="flex text-xl p-1 bg-[#05ABF3] text-white rounded-[10px]"
         onClick={() => loginWithRedirect()}>
         Log In
       </button>

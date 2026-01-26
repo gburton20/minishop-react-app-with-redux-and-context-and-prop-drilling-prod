@@ -10,9 +10,9 @@ const AuthButton = () => {
       {!isAuthenticated ? (
         <LoginButton/>
       ) : (
-        <div className='authenticated-user-container justify'>
-          <div className='authenticated-user-name'>
-            Welcome, {user.name}
+        <div className='flex justify-around items-center bg-[linear-gradient(135deg,#667eea_0%,#764ba2_100%)] h-22 rounded-lg'>
+          <div className="text-white">
+            👤 Welcome, {user.name}
           </div>
           <LogoutButton/>
         </div>

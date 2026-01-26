@@ -6,7 +6,7 @@ const LogoutButton = () => {
   return (
     <button 
       onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
-      className="logout-button"
+      className="flex text-xl p-1 bg-gray-500 text-white rounded-[10px]"
     >
       Log Out
     </button>
