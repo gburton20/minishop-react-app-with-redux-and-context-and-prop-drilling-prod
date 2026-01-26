@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -84,6 +86,7 @@ body {
 
 /* Navbar.jsx section - Base mobile styles */
 
+/* ✅ MIGRATED TO TAILWIND */
 .navbar {
   display: flex;
   flex-direction: row;
@@ -253,7 +256,7 @@ body {
   position: relative;
 }
 
-.cart-item-counter {
+/* .cart-item-counter {
   position: absolute;
   top: 30px;
   left: 28px;
@@ -268,7 +271,7 @@ body {
   align-items: center;
   justify-content: center;
   pointer-events: none;
-}
+} */
 
 .product-filter {
   display: flex;

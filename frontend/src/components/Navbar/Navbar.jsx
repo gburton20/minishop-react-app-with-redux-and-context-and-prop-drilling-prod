@@ -7,7 +7,8 @@ const Navbar = ({navCartAddCount}) => {
 
   return (
     <>
-      <div className='navbar'>
+      {/* TODO: Complete Tailwind migration - remove .navbar class */}
+      <div className='navbar flex flex-row flex-wrap justify-between items-center max-w-full p-4 gap-4'>
         <Link to="/">
           <img src='/minishop-nav-logo.svg'/>
         </Link>
