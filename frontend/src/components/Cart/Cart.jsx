@@ -87,18 +87,18 @@ const Cart = () => {
 
   return (
     <>
-      <div className='cart'>
-        <div className='cart-container'>
-          <div className='cart-title-and-clear-cart-button-container'>
-            <div className='cart-title'>You've added <strong>{numOfProductsInCart} items</strong> to your cart! 🛒</div>
-            <button className='clear-cart-button' onClick={() => {
+      <div className=''>
+        <div className='flex flex-col justify-center border-2 border-gray-500 rounded-[10px] m-1'>
+          <div className='flex flex-col items-center p-4'>
+            <div className='bg-amber-100 mb-4'>You've added <strong>{numOfProductsInCart} items</strong> to your cart! 🛒</div>
+            <button className='flex text-xl p-1 bg-gray-500 text-white rounded-[10px] sm:w-auto' onClick={() => {
               setCartState([]);
               setNavCartAddCount(0);
             }}>Clear cart</button>
           </div>
           {safeNumOfProductsInCart > 0 && (
-            <div className='cart-product-and-summary-container'>
-              <div className='cart-product-list'>
+            <div className='flex flex-col justify-evenly'>
+              <div className='flex flex-col m-2.5'>
                 <CartItem
                   cartItems={uniqueSortedCartProducts}
                   cartItemCounts={counts}
@@ -106,18 +106,14 @@ const Cart = () => {
                   handleRemoveFromCart={handleRemoveFromCart}
                 />
               </div>
-              <div className='cart-order-summary-container'>
-                <div className='cart-order-summary-breakdown'>
-                  <div className='cart-order-total-container'>
-                    <div className='cart-order-total-value'><strong>TOTAL: ${Number(sumOfCartItems).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></div>
-                    <button 
-                      className='cart-proceed-to-checkout-button' 
-                      onClick={handleRealStripeCheckout}
-                    >
-                      Proceed to Checkout
-                    </button>
-                  </div>
-                </div>
+              <div className='flex flex-col items-center border-2 m-2.5 p-2.5'>
+                <div className='bg-amber-200 mb-2.5'><strong>TOTAL: ${Number(sumOfCartItems).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></div>
+                <button 
+                  className='flex w-fit bg-[#05ABF3] text-white rounded-[10px] m-1.25 hover:bg-[#007bff] h-[10%] border-solid border-2 border-gray-500 px-4 py-2 items-center' 
+                  onClick={handleRealStripeCheckout}
+                >
+                  Proceed to Checkout
+                </button>
               </div>
             </div>
             )}     

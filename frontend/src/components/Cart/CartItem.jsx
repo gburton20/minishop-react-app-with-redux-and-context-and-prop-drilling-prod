@@ -18,19 +18,20 @@ const CartItem = ({
           index === self.findIndex(t => t.name === item.name)
         )
         .map((item, _) => (
-          <div className='cart-product-container' key={item.name}>
+          <div className='flex border-2 mb-2' key={item.name}>
             <img
-              className='cart-product-card-image'
+              className='w-[60%]'
               src={item.image || '/no-image-placeholder-image.svg'}
               alt={item.name || 'No product image found'}
             />
-            <div className='cart-product-card-details-parent'>
-              <div className='cart-product-card-details-child'>
-                <div className='cart-product-card-name'>{item.name}</div>
-                <div className='cart-product-card-price'>${Number(item.price).toFixed(2)}</div>
-                <div className='cart-product-card-quantity-and-buttons'>
+            <div className='flex flex-col justify-center items-center'>
+              <div className='flex flex-col justify-center items-center text-center'>
+                <div className='font-medium'>{item.name}</div>
+                <div className='font-light'>${Number(item.price).toFixed(2)}</div>
+                <div className='flex justify-evenly m-1.25 p-1.25 w-[80%] border-2'>
                   {/* The '-' button: */}
                   <button
+                    className="bg-gray-400 w-[25%] rounded-lg hover:bg-[#f5f5f5] hover:border-[#999]"
                     onClick={() => {
                       handleRemoveFromCart(item);
                     }}>-</button>

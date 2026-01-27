@@ -27,6 +27,7 @@ venv
 .venv
 env
 .env
+source/
 requirements.txt
 
 # sqlite to postgres migration

@@ -60,27 +60,44 @@ const BannerAdContainer = ({ openProductModal }) => {
                 <h1 className='banner-h1'>
                     Minishop's deal of the day!
                 </h1>
-                <p>No special deal available today. Check back tomorrow!</p>
+                <p className='text-white'>No special deal available today. Check back tomorrow!</p>
             </div>
         );
     }
 
     return (
-        <div className='banner-ad-div' style={{ position: 'relative' }}>
+        <div 
+            className='flex flex-col justify-center items-center py-4 px-3 my-2 bg-[linear-gradient(135deg,#667eea_0%,#764ba2_100%)] rounded-xl'
+            style={{ position: 'relative' }}
+        >
             <h1 className='banner-h1'>
                 Minishop's deal of the day!
             </h1>
-            <div className="daily-product-container">
+            <div className="flex justify-center mt-4 w-[70vw] scale-100 border-2 border-solid border-#ffd700 bg-white rounded-lg shadow-[0 2px 10px rgba(0, 0, 0, 0.1)]
+            
+            sm:w-[45vw]
+
+            md:w-[37.5vw]
+
+            lg:w-[32.5vw]
+
+            xl:w-[30vw]
+
+            2xl-[27.5vw]
+
+            ">
                 <ProductCard
                     product={{
                         ...dailyProduct,
                         image: dailyProduct.image && dailyProduct.image.startsWith('http')
+                        
                             ? dailyProduct.image
                             : dailyProduct.image 
                               ? `${import.meta.env.VITE_API_URL}${dailyProduct.image}`
                               : ''
                     }}
                     openProductModal={openProductModal}
+                    className="border-2 border-solid border-[#ffd700]"
                 />
             </div>
         </div>

@@ -4,7 +4,7 @@ import { IoCartOutline } from "react-icons/io5";
 const CartNavIcon = ({navCartAddCount}) => {
   return (
     <>
-      <div className='relative'>
+      <div className='relative text-white sm:text-black'>
         <IoCartOutline
           className='w-10 h-10'
         />

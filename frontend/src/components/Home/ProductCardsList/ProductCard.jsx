@@ -4,6 +4,7 @@ import CartContext from '../../../context/CartContext'
 const ProductCard = ({
     product,
     openProductModal,
+    className
 }) => {
     const { handleAddToCart } = useContext(CartContext);
     const [hoverTimer, setHoverTimer] = useState(null);
@@ -48,7 +49,7 @@ const ProductCard = ({
     return (
         <>
             <div 
-                className='product-card-container'
+                className={`flex flex-col items-center w-[15.76vw] h-auto text-center m-1.25 bg-white rounded-lg shadow-[0 4px 8px rgba(0, 0, 0, 0.15)] transform-100 border-solid border-2 border-gray min-w-40 max-w-70 scale-100 ${className}`}
                 ref={cardRef}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
@@ -74,7 +75,7 @@ const ProductCard = ({
                 <div className="product-card-name">{product.name}</div>
                 <div className="product-card-price">${Number(product.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                 <button
-                    className='product-card-add-to-cart-button'
+                    className='flex w-fit bg-[#05ABF3] text-white rounded-[10px] m-1.25 hover:bg-[#007bff] h-[10%] border-solid border-2 border-gray-500 px-4 py-2 items-center'
                     onClick={() => {
                         const productDataPerClick = {
                             category: product.category,
@@ -85,7 +86,9 @@ const ProductCard = ({
                         handleAddToCart(productDataPerClick);
                     }}
                 >
+                    <div className='text-[wrap]'>
                     Add to cart
+                    </div>
                 </button>
             </div>
         </>

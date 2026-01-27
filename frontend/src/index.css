@@ -226,7 +226,7 @@ body {
   justify-content: space-between;
 }
 
-/* ✅ login-button converted to Tailwind */
+/* ✅ login-button, product-card-add-to-cart-button converted to Tailwind */
 .login-button, .product-card-add-to-cart-button, .cart-proceed-to-checkout-button {
   width: fit-content;
   background-color: #05ABF3;
@@ -236,13 +236,14 @@ body {
   margin: 5px 5px;
 }
 
+/* ✅ login-button, product-card-add-to-cart-button converted to Tailwind */
 .login-button:hover,
 .product-card-add-to-cart-button:hover,
 .cart-proceed-to-checkout-button:hover {
   background-color: #007bff;
 }
 
-/* ✅ logout-button converted to Tailwind */
+/* ✅ logout-button, clear-cart-button converted to Tailwind */
 .logout-button, .clear-cart-button {
   width: fit-content;
   background-color: grey;
@@ -252,6 +253,7 @@ body {
   margin: 5px 5px;
 }
 
+/* ✅ product-card-add-to-cart-button converted to Tailwind */
 .product-card-add-to-cart-button {
   width: 50%;
   height: 10%;
@@ -420,6 +422,7 @@ body {
     margin-top: 1rem;
 }
 
+  /* ✅ daily-product-container and product-card-container converted to Tailwind */
 .daily-product-container .product-card-container {
     background: white;
     border-radius: 8px;
@@ -435,6 +438,7 @@ body {
   margin-top: 10px;
 }
 
+  /* ✅ product-card-container converted to Tailwind */
 .product-card-container {
   display: flex;
   flex-direction: column;
@@ -450,12 +454,15 @@ body {
 
 /* Mobile: larger product cards for better visibility */
 @media (max-width: 639px) {
+    /* ✅ product-card-container converted to Tailwind */
   .product-card-container {
     width: 45vw;
     min-width: 160px;
     max-width: 200px;
   }
   
+  /* ✅ daily-product-container and product-card-container converted to Tailwind */
+
   .daily-product-container .product-card-container {
     width: 70vw;
     max-width: 280px;
@@ -604,6 +611,7 @@ body {
 }
 
 /* Make product card container relative for absolute positioning */
+  /* ✅ product-card-container converted to Tailwind */
 .product-card-container {
     position: relative;
 }
@@ -962,6 +970,7 @@ body {
 
 /* Cart.jsx section: */
 
+/* ✅ .cart-container has been converted to Tailwind */
 .cart-container {
   display: flex;
   flex-direction: column;
@@ -969,29 +978,37 @@ body {
   border: 4px #05ABF3 solid;
 }
 
+/* ✅ cart-title-and-clear-cart-button-container has been converted to Tailwind */
 .cart-title-and-clear-cart-button-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  border: 2px coral dashed
 }
 
+/* ✅ cart-title has been converted to Tailwind */
 .cart-title {
   text-decoration: none;
 }
 
+/* ✅ cart-product-and-summary-container has been converted to Tailwind */
 .cart-product-and-summary-container {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
 }
 
+/* ✅ cart-product-list has been converted to Tailwind */
 .cart-product-list {
   display: flex;
   flex-direction: column;
   margin: 10px 10px;
 }
 
+
 /* CartItem.jsx section: */
+/* ✅ cart-product-container converted to Tailwind */
 .cart-product-container {
   display: flex;
   flex-direction: row;
@@ -1006,6 +1023,7 @@ body {
   height: 100%;
 }
 
+✅
 .cart-product-card-details-parent {
   display: flex;
   flex-direction: column;
@@ -1013,6 +1031,7 @@ body {
   align-items: center;
 }
 
+✅
 .cart-product-card-details-child {
   display: flex;
   flex-direction: column;
@@ -1051,6 +1070,7 @@ body {
   background-color: #e8e8e8;
 }
 
+/* ✅ cart-order-summary-container converted to Tailwind */
 .cart-order-summary-container {
   display: flex;
   flex-direction: column;

@@ -13,11 +13,10 @@ const Navbar = ({navCartAddCount}) => {
           <img src='/minishop-nav-logo.svg'/>
         </Link>
         <SearchInput/>
-        <AuthButton/>
-        <Link to="/cart">
-          <CartNavIcon
-            navCartAddCount={navCartAddCount}
-          />
+        <AuthButton navCartAddCount={navCartAddCount} />
+        {/* CartNavIcon: hidden on mobile, visible on sm+ */}
+        <Link to="/cart" className="hidden sm:block">
+          <CartNavIcon navCartAddCount={navCartAddCount} />
         </Link>
       </div>
     </>
