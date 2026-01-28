@@ -8,6 +8,7 @@ import Navbar from './components/Navbar/Navbar'
 import Toast from './components/Toast'
 import { CartProvider } from './context/CartContext'
 import CartContext from './context/CartContext'
+import './index.css';
 
 const UserMetadataContext = createContext(null);
 export const useUserMetadata = () => useContext(UserMetadataContext);

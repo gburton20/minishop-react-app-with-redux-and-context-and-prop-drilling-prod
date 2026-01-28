@@ -244,14 +244,14 @@ body {
 }
 
 /* ✅ logout-button, clear-cart-button converted to Tailwind */
-.logout-button, .clear-cart-button {
+/* .logout-button, .clear-cart-button {
   width: fit-content;
   background-color: grey;
   color: white;
   border: none;
   border-radius: 10px;
   margin: 5px 5px;
-}
+} */
 
 /* ✅ product-card-add-to-cart-button converted to Tailwind */
 .product-card-add-to-cart-button {

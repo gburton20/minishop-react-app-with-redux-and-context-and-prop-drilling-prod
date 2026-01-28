@@ -5,7 +5,7 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [toastMessage, setToastMessage] = useState('');
   const [showToast, setShowToast] = useState(false);
-
+  
   const [cartState, setCartState] = useState(() => {
     const saved = localStorage.getItem('Cart');
     if (saved === null) {
@@ -13,12 +13,13 @@ export const CartProvider = ({ children }) => {
     }
     return saved ? JSON.parse(saved) : [];
   });
+  // Compute unique, sorted cart items for display
+  const uniqueSortedCartItems = Array.from(
+    new Map(cartState.map(product => [product.name, product]))
+      .values()
+  ).sort((a, b) => a.name.localeCompare(b.name));
+  
 
-  // Initialize navCartAddCount from localStorage cart length
-  const [navCartAddCount, setNavCartAddCount] = useState(() => {
-    const saved = localStorage.getItem('Cart');
-    return saved ? JSON.parse(saved).length : 0;
-  });
 
   useEffect(() => {
     localStorage.setItem('Cart', JSON.stringify(cartState));
@@ -28,7 +29,6 @@ export const CartProvider = ({ children }) => {
     setCartState(prevCartState => {
       const newCartState = [...prevCartState, product];
       const count = newCartState.filter(p => p.name === product.name).length;
-      
       // Show toast notification with count
       if (count > 1) {
         setToastMessage(`x${count} ${product.name} added to cart!`);
@@ -36,10 +36,8 @@ export const CartProvider = ({ children }) => {
         setToastMessage(`${product.name} added to cart!`);
       }
       setShowToast(true);
-      
       return newCartState;
     });
-    setNavCartAddCount(previousCount => previousCount + 1);
   };
 
   const closeToast = () => {
@@ -50,7 +48,6 @@ export const CartProvider = ({ children }) => {
     setCartState(prevCartState => {
       const indexOfProductToRemove = prevCartState.findIndex(product => product.name === productToRemove.name);
       if (indexOfProductToRemove !== -1) {
-        setNavCartAddCount(prevCount => Math.max(prevCount - 1, 0));
         return [
           ...prevCartState.slice(0, indexOfProductToRemove),
           ...prevCartState.slice(indexOfProductToRemove + 1)
@@ -58,6 +55,10 @@ export const CartProvider = ({ children }) => {
       }
       return prevCartState;
     });
+  };
+
+  const handleRemoveAllQtyOfProductsFromCartItem = (productToRemove) => {
+    setCartState(prevCartState => prevCartState.filter(product => product.name !== productToRemove.name));
   };
 
   const counts = cartState.reduce((acc, product) => {
@@ -75,12 +76,13 @@ export const CartProvider = ({ children }) => {
   return (
     <CartContext.Provider
       value={{
-        navCartAddCount,
+        navCartAddCount: cartState.length,
         cartState,
+        cartItems: uniqueSortedCartItems,
         setCartState,
-        setNavCartAddCount,
         handleAddToCart,
         handleRemoveFromCart,
+        handleRemoveAllQtyOfProductsFromCartItem,
         counts,
         sumOfCartItems,
         numOfProductsInCart,
